@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LCE PC – Play Your Favorite Minecraft, Reimagined</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg1: #050816;
+      --bg2: #111827;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.15);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --btn-bg: #111827;
+      --btn-border: #374151;
+      --btn-hover-bg: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #000 100%);
+      color: var(--text-main);
+    }
+
+    .wrapper {
+      max-width: 720px;
+      width: 100%;
+      padding: 32px 20px 40px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      padding: 28px 24px 26px;
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.18), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.18), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+    }
+
+    h1 {
+      font-size: clamp(26px, 4vw, 32px);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .headline-main {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .headline-rotator {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: clamp(22px, 3.4vw, 26px);
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .headline-rotator span.static {
+      opacity: 0.9;
+    }
+
+    .headline-rotator span.dynamic {
+      position: relative;
+      min-width: 140px;
+      text-align: left;
+      color: var(--accent);
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      overflow: hidden;
+    }
+
+    .dynamic-text {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(12px);
+      transition:
+        opacity 260ms ease-out,
+        transform 260ms ease-out;
+      white-space: nowrap;
+    }
+
+    .dynamic-text.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .subcopy {
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 520px;
+    }
+
+    .subcopy strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .buttons {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1 1 180px;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition:
+        background 160ms ease-out,
+        border-color 160ms ease-out,
+        transform 120ms ease-out,
+        box-shadow 160ms ease-out;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-color: rgba(34, 197, 94, 0.4);
+      color: #022c22;
+      box-shadow:
+        0 10px 30px rgba(34, 197, 94, 0.35),
+        0 0 0 1px rgba(15, 23, 42, 0.8);
+    }
+
+    .btn:hover {
+      background: var(--btn-hover-bg);
+      border-color: #4b5563;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      box-shadow:
+        0 14px 34px rgba(34, 197, 94, 0.45),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    .btn span.label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn span.icon {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 520px) {
+      .card {
+        padding: 22px 18px 22px;
+      }
+      .buttons {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span>Legacy Console Edition – PC Port</span>
+        </div>
+
+        <h1 class="headline-main">
+          Play your favorite version of Minecraft<br />
+          <span class="headline-rotator">
+            <span class="static">but it's</span>
+            <span class="dynamic">
+              <span class="dynamic-text active">optimized (256&nbsp;MB of RAM!)</span>
+              <span class="dynamic-text">free</span>
+              <span class="dynamic-text">moddable</span>
+              <span class="dynamic-text">community driven</span>
+            </span>
+          </span>
+        </h1>
+
+        <p class="subcopy">
+          A community PC port of the classic console experience — lightweight, familiar, and ready to tinker with.
+          <strong>No launcher bloat, no nonsense.</strong> Just jump in, play, and make it yours.
+        </p>
+
+        <div class="buttons">
+          <a
+            class="btn btn-primary"
+            href="https://github.com/smartcmd/MinecraftConsoles/releases/latest"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icon">⬇️</span>
+            <span class="label">Download latest from community GitHub by smartcmd</span>
+          </a>
+
+          <a
+            class="btn"
+            href="https://github.com/smartcmd"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icon">👤</span>
+            <span class="label">View smartcmd's profile</span>
+          </a>
+
+          <a
+            class="btn"
+            href="https://github.com/somegamerguyontheinternet/Legacy-Console-Edition-install-kit./releases/download/v0.2/InstallLCE.bat"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icon">🛠️</span>
+            <span class="label">Get fan made installer</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const texts = document.querySelectorAll(".dynamic-text");
+      let index = 0;
+
+      function cycle() {
+        texts[index].classList.remove("active");
+        index = (index + 1) % texts.length;
+        texts[index].classList.add("active");
+      }
+
+      setInterval(cycle, 1000);
+    })();
+  </script>
+</body>
+</html>
