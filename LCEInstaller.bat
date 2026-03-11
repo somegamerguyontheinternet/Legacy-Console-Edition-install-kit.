@@ -43,17 +43,29 @@ if "%choice%"=="6" exit
 goto menu
 
 :: ============================================================
-:: DOWNLOAD FUNCTION
+:: DOWNLOAD FUNCTION (SUPER FAST CURL VERSION)
 :: ============================================================
 :download_zip
 echo Downloading latest LCE build...
-powershell -Command "Invoke-WebRequest '%ZIP_URL%' -OutFile '%ZIP_FILE%'"
+
+curl.exe -L --retry 5 --retry-delay 2 --ssl-no-revoke --compressed ^
+  -o "%ZIP_FILE%" "%ZIP_URL%"
+
 if not exist "%ZIP_FILE%" (
     echo ERROR: Failed to download ZIP.
     pause
     goto menu
 )
-powershell -Command "Unblock-File -Path '%ZIP_FILE%'"
+
+:: Sanity check for 0‑byte or corrupted download
+for %%A in ("%ZIP_FILE%") do set ZIPSIZE=%%~zA
+if "%ZIPSIZE%"=="0" (
+    echo ERROR: Download returned empty file.
+    del "%ZIP_FILE%"
+    pause
+    goto menu
+)
+
 echo Download complete.
 goto :eof
 
